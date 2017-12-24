@@ -20,7 +20,6 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from nylas.logging import get_logger
 log = get_logger()
 
-from inbox.encryption.vault import encrypt as vault_encrypt
 from inbox.encryption.vault import encrypt_batch as vault_encrypt_batch
 from inbox.util.html import plaintext2html, strip_tags
 from inbox.sqlalchemy_ext.util import JSON, json_field_too_long, bakery
@@ -249,6 +248,8 @@ class Message(MailSyncBase, HasRevisions, HasPublicID, UpdatedAtMixin,
             The full message including headers (encoded).
 
         """
+        global vault_config
+
         _rqd = [account, mid, folder_name, body_string]
         if not all([v is not None for v in _rqd]):
             raise ValueError(
