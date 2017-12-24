@@ -11,7 +11,8 @@ vault_config = config.get('VAULT')
 
 client = hvac.Client(url=vault_config['URL'])
 
-client.auth_approle(vault_config['APP_ROLE_ID'], vault_config['APP_ROLE_SECRET_ID'])
+if vault_config['ENABLED']:
+    client.auth_approle(vault_config['APP_ROLE_ID'], vault_config['APP_ROLE_SECRET_ID'])
 
 
 def encrypt(plaintext, named_key):
