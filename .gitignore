@@ -1,4 +1,5 @@
 # Nylas-specific
+/data
 /packer_cache
 /log
 /man

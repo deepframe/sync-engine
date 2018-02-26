@@ -1,0 +1,53 @@
+version: "3"
+services:
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=deepframetest
+    volumes:
+      - ./data/nylas_mysql:/var/lib/mysql
+
+  redis:
+    image: redis
+    volumes:
+      - ./data/nylas_redis:/data
+
+  sync-proxy:
+    image: nginx
+    ports:
+      - 5555:5555
+    volumes:
+      - ./build-files/nylas-sync-proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./build-files/nylas-sync-proxy/ssl/my-root-ca.crt.pem:/etc/nginx/my-root-ca.crt.pem
+      - ./build-files/nylas-sync-proxy/ssl/my-server.crt.pem:/etc/nginx/my-server.crt.pem
+      - ./build-files/nylas-sync-proxy/ssl/my-server.key.pem:/etc/nginx/my-server.key.pem
+    links:
+      - sync-engine-api:sync-engine-api
+
+  sync-engine-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ["python", "/opt/sync-engine/bin/inbox-api"]
+    links:
+    - mysql:mysql
+    - redis:redis
+    volumes:
+      - ./data/nylas_part:/var/lib/inboxapp
+    hostname: sync-engine-api
+    environment:
+      - NYLAS_ADMIN_PASSWORD=bbb4a88d392370c66a51512c4403353a386653f341bebdeaa030d289d8889cdc:e4e3670c6e0f4174b2a6acc2a33acf69 #User: admin, Password: deepframetest
+
+  sync-engine-start:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ["python", "/opt/sync-engine/bin/inbox-start"]
+    links:
+    - mysql:mysql
+    - redis:redis
+    volumes:
+      - ./data/nylas_part:/var/lib/inboxapp
+    hostname: sync-engine-start
+    environment:
+      - NYLAS_ADMIN_PASSWORD=bbb4a88d392370c66a51512c4403353a386653f341bebdeaa030d289d8889cdc:e4e3670c6e0f4174b2a6acc2a33acf69 #User: admin, Password: deepframetest
