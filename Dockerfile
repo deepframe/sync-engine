@@ -61,6 +61,15 @@ ENV LANF=en_US.UTF-8
 
 
 ## Usage of our extension of nylas-sync
+
+RUN mkdir -p /var/lib/inboxapp/parts
+
+RUN mkdir -p /var/log/inboxapp
+
+RUN mkdir -p /etc/inboxapp
+
+ENV PYTHONPATH=/opt/sync-engine
+
 RUN mkdir /opt/sync-engine
 
 WORKDIR /opt/sync-engine
@@ -82,23 +91,14 @@ RUN pip uninstall -y chardet
 
 RUN pip install -r requirements.txt
 
-COPY ./ /opt/sync-engine
-
-RUN pip install -e .
-RUN useradd -ms /bin/bash inbox
-
-RUN mkdir -p /etc/inboxapp
-
 COPY ./build-files/config.json /etc/inboxapp/config.json
 COPY ./build-files/secrets.yml /etc/inboxapp/secrets.yml
 
-RUN chmod 0644 /etc/inboxapp/config.json && chmod 0600 /etc/inboxapp/secrets.yml && chown -R inbox:inbox /etc/inboxapp
+RUN chmod 0644 /etc/inboxapp/config.json && chmod 0600 /etc/inboxapp/secrets.yml
 
-RUN mkdir -p /var/lib/inboxapp/parts && mkdir -p /var/log/inboxapp && chown inbox:inbox /var/log/inboxapp
-RUN chown -R inbox:inbox /var/lib/inboxapp && chown -R inbox:inbox /opt/sync-engine
+COPY ./ /opt/sync-engine
 
-RUN echo "export PYTHONPATH=/opt/sync-engine" >> /home/inbox/.profile
-ENV PYTHONPATH=/opt/sync-engine
+RUN pip install -e .
 
 VOLUME /var/lib/inboxapp
 
