@@ -85,8 +85,7 @@ def _update_config_from_env(config, env):
 
     if env in ['prod', 'staging']:
         base_cfg_path = [
-            '/etc/inboxapp/secrets-production.yml',
-            '/etc/inboxapp/secrets.yml',
+            '/etc/inboxapp/secrets.json',
             '/etc/inboxapp/config.json',
         ]
     else:
