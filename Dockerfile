@@ -92,9 +92,7 @@ RUN pip uninstall -y chardet
 RUN pip install -r requirements.txt
 
 COPY ./build-files/config.json /etc/inboxapp/config.json
-COPY ./build-files/secrets.yml /etc/inboxapp/secrets.yml
-
-RUN chmod 0644 /etc/inboxapp/config.json && chmod 0600 /etc/inboxapp/secrets.yml
+COPY ./build-files/secrets.json /etc/inboxapp/secrets.json
 
 COPY ./ /opt/sync-engine
 
