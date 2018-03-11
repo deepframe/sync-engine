@@ -1,8 +1,7 @@
 {
   "GOOGLE_OAUTH_CLIENT_ID": "",
   "GOOGLE_OAUTH_CLIENT_SECRET": "",
-  "MS_LIVE_OAUTH_CLIENT_ID": "",
-  "MS_LIVE_OAUTH_CLIENT_SECRET": "",
+
   "BLOCK_ENCRYPTION_KEY": "",
   "SECRET_ENCRYPTION_KEY": "",
 
@@ -11,6 +10,7 @@
   "CONTACTS_SEARCH": {
     "SENTRY_DSN": ""
   },
+  "SENTRY_DSN": "",
 
   "VAULT": {
     "ENABLED": false,
