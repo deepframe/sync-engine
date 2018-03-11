@@ -105,11 +105,12 @@ def new_gmail_account():
     auth_info['provider'] = 'gmail'
 
     email_address = auth_info['email']
-    account_exsist = False
+    account_exists = False
 
     # Check for email in allowed emails list
+    emails_filter_enabled = config.get('EMAILS_FILTER_ENABLED')
     allowed_emails = config.get('ALLOWED_EMAILS')
-    if allowed_emails and email_address not in allowed_emails:
+    if emails_filter_enabled and allowed_emails and email_address not in allowed_emails:
         return jsonify({"code": "email_not_allowed", "message": "Email not allowed", "profile": auth_info})
 
     with session_scope(0) as db_session:
@@ -118,7 +119,7 @@ def new_gmail_account():
             api_id = account.namespace.public_id
             return jsonify({"code": "account_exist", "message": "Account already exist", "api_id": api_id})
         elif account is not None and reauth:
-            account_exsist = True
+            account_exists = True
             account = auth_handler.update_account(account, auth_info)
         else:
             account = auth_handler.create_account(email_address, auth_info)
@@ -132,7 +133,7 @@ def new_gmail_account():
 
         api_id = account.namespace.public_id
 
-    if account_exsist:
+    if account_exists:
         return jsonify({"code": "account_updated", "message": "Account already exist and Updated", "api_id": api_id})
 
     return jsonify({"code": "account_created", "message": "new account created", "api_id": api_id})
