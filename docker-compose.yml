@@ -32,8 +32,6 @@ services:
     volumes:
       - ./data/nylas_part:/var/lib/inboxapp
     hostname: sync-engine-api
-    environment:
-      - NYLAS_ADMIN_PASSWORD=bbb4a88d392370c66a51512c4403353a386653f341bebdeaa030d289d8889cdc:e4e3670c6e0f4174b2a6acc2a33acf69 #User: admin, Password: deepframetest
 
   sync-engine-start:
     build:
@@ -46,5 +44,3 @@ services:
     volumes:
       - ./data/nylas_part:/var/lib/inboxapp
     hostname: sync-engine-start
-    environment:
-      - NYLAS_ADMIN_PASSWORD=bbb4a88d392370c66a51512c4403353a386653f341bebdeaa030d289d8889cdc:e4e3670c6e0f4174b2a6acc2a33acf69 #User: admin, Password: deepframetest
