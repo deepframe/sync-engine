@@ -17,7 +17,7 @@ services:
     ports:
       - 5555:5555
     volumes:
-      - ./build-files/nylas-sync-proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./build-files/nylas-sync-proxy/nginx-dev.conf:/etc/nginx/nginx.conf
     links:
       - sync-engine-api:sync-engine-api
 

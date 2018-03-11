@@ -6,6 +6,8 @@
   "BLOCK_ENCRYPTION_KEY": "",
   "SECRET_ENCRYPTION_KEY": "",
 
+  "NYLAS_ADMIN_PASSWORD": "password:salt",
+
   "CONTACTS_SEARCH": {
     "SENTRY_DSN": ""
   },
