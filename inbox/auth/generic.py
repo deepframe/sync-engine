@@ -363,7 +363,6 @@ def create_imap_connection(host, port, ssl_required, use_timeout=True):
     is returned. Otherwise, an exception is raised.
 
     """
-    print "port is", 993
     use_ssl = port == 993
     timeout = 120 if use_timeout else None
 

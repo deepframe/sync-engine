@@ -67,10 +67,7 @@ class SyncService(object):
             mod, mod.SYNC_MONITOR_CLS) for mod in module_registry.values()
             if hasattr(mod, 'SYNC_MONITOR_CLS')}
 
-        print "[DEBUG] monitor_cls_for = ", self.monitor_cls_for
-
         for p_name, p in providers.iteritems():
-            print "[DEBUG] p_name = ", p_name, " p = ", p
             if p_name not in self.monitor_cls_for:
                 self.monitor_cls_for[p_name] = self.monitor_cls_for["generic"]
 
@@ -215,19 +212,8 @@ class SyncService(object):
         If that account doesn't exist, does nothing.
 
         """
-        self.log.info(
-            'start-sync-debug-1',
-            account_id=account_id
-        )
         with self.semaphore, session_scope(account_id) as db_session:
             acc = db_session.query(Account).with_for_update().get(account_id)
-
-            self.log.info(
-                'start-sync-debug-2',
-                acc=acc,
-                process_identifier=self.process_identifier,
-            )
-
             if acc is None:
                 self.log.error('no such account', account_id=account_id)
                 return False

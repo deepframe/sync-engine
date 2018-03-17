@@ -17,7 +17,6 @@ class HTTPFrontend(object):
         app = self._create_app()
         # We need to spawn an OS-level thread because we don't want a stuck
         # greenlet to prevent us to access the web API.
-        print "[DEBUG] start new thread_id"
         gevent._threading.start_new_thread(run_simple, ('0.0.0.0', self.port, app),
                                            {"request_handler": _QuietHandler})
 
