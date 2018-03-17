@@ -94,12 +94,18 @@ def main(prod, enable_tracer, enable_profiler, config, process_num):
 
     process_identifier = '{}:{}'.format(platform.node(), process_num)
     sync_service = SyncService(process_identifier, process_num)
+
+    log.info('[DEBUG] sync_service created')
+
     http_frontend = SyncHTTPFrontend(sync_service, port, enable_tracer,
                                      enable_profiler_api)
     sync_service.register_pending_avgs_provider(http_frontend)
     http_frontend.start()
 
+    log.info('[DEBUG] http_frontend.start called')
+
     sync_service.run()
+    log.info('[DEBUG] sync_service.run called')
 
     print >>sys.stderr, "\033[94mNylas Sync Engine exiting...\033[0m"
 
