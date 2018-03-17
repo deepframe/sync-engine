@@ -22,6 +22,9 @@ from delta_stream_api import app as delta_stream_api
 
 from inbox.webhooks.gpush_notifications import app as webhooks_api
 
+from inbox.config import config
+
+
 app = Flask(__name__)
 # Handle both /endpoint and /endpoint/ without redirecting.
 # Note that we need to set this *before* registering the blueprint.
@@ -114,7 +117,7 @@ def auth_admin(request):
         username = request.authorization.username
         password = request.authorization.password
 
-        admin_password = os.environ['NYLAS_ADMIN_PASSWORD']
+        admin_password = config.get('NYLAS_ADMIN_PASSWORD')
 
         if username == 'admin' and check_password(admin_password, password):
             return

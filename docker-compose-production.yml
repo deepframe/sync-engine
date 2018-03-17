@@ -1,0 +1,8 @@
+version: "3"
+services:
+  sync-proxy:
+    volumes:
+      - ./build-files/nylas-sync-proxy/nginx-live.conf:/etc/nginx/nginx.conf
+      - ./build-files/nylas-sync-proxy/ssl/my-root-ca.crt.pem:/etc/nginx/my-root-ca.crt.pem
+      - ./build-files/nylas-sync-proxy/ssl/my-server.crt.pem:/etc/nginx/my-server.crt.pem
+      - ./build-files/nylas-sync-proxy/ssl/my-server.key.pem:/etc/nginx/my-server.key.pem

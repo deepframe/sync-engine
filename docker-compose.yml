@@ -1,0 +1,46 @@
+version: "3"
+services:
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=deepframetest
+    volumes:
+      - ./data/nylas_mysql:/var/lib/mysql
+
+  redis:
+    image: redis
+    volumes:
+      - ./data/nylas_redis:/data
+
+  sync-proxy:
+    image: nginx
+    ports:
+      - 5555:5555
+    volumes:
+      - ./build-files/nylas-sync-proxy/nginx-dev.conf:/etc/nginx/nginx.conf
+    links:
+      - sync-engine-api:sync-engine-api
+
+  sync-engine-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ["python", "/opt/sync-engine/bin/inbox-api"]
+    links:
+    - mysql:mysql
+    - redis:redis
+    volumes:
+      - ./data/nylas_part:/var/lib/inboxapp
+    hostname: sync-engine-api
+
+  sync-engine-start:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ["python", "/opt/sync-engine/bin/inbox-start"]
+    links:
+    - mysql:mysql
+    - redis:redis
+    volumes:
+      - ./data/nylas_part:/var/lib/inboxapp
+    hostname: sync-engine-start

@@ -1,4 +1,6 @@
 # Nylas-specific
+/data
+/build-files/nylas-sync-proxy/ssl/
 /packer_cache
 /log
 /man
@@ -85,3 +87,6 @@ setup/
 
 # Pycharm
 .idea/
+
+# application specific
+build-files/secrets.json
