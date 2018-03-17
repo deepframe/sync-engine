@@ -1,5 +1,6 @@
 # Nylas-specific
 /data
+/build-files/nylas-sync-proxy/ssl/
 /packer_cache
 /log
 /man
