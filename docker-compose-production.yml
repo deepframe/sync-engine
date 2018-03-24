@@ -1,8 +1,40 @@
 version: "3"
 services:
+  redis:
+    image: redis
+    volumes:
+      - ./data/nylas_redis:/data
+
   sync-proxy:
+    image: nginx
+    ports:
+      - 5555:5555
     volumes:
       - ./build-files/nylas-sync-proxy/nginx-live.conf:/etc/nginx/nginx.conf
       - ./build-files/nylas-sync-proxy/ssl/my-root-ca.crt.pem:/etc/nginx/my-root-ca.crt.pem
       - ./build-files/nylas-sync-proxy/ssl/my-server.crt.pem:/etc/nginx/my-server.crt.pem
       - ./build-files/nylas-sync-proxy/ssl/my-server.key.pem:/etc/nginx/my-server.key.pem
+    links:
+      - sync-engine-api:sync-engine-api
+
+  sync-engine-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ["python", "/opt/sync-engine/bin/inbox-api"]
+    links:
+    - redis:redis
+    volumes:
+      - ./data/nylas_part:/var/lib/inboxapp
+    hostname: sync-engine-api
+
+  sync-engine-start:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ["python", "/opt/sync-engine/bin/inbox-start"]
+    links:
+    - redis:redis
+    volumes:
+      - ./data/nylas_part:/var/lib/inboxapp
+    hostname: sync-engine-start
