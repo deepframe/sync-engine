@@ -78,7 +78,7 @@ def start(port, start_syncback, enable_tracer, enable_profiler):
             inbox_config['DEBUG_PROFILING_ON'] = True
         enable_profiler_api = inbox_config.get('DEBUG_PROFILING_ON')
 
-        syncback = SyncbackService(0, 0, 1)
+        syncback = SyncbackService("0", 0, 1)
         profiling_frontend = SyncbackHTTPFrontend(int(port) + 1, enable_tracer, enable_profiler_api)
         profiling_frontend.start()
         syncback.start()
