@@ -7,6 +7,8 @@ Install docker and docker-compose.
 cp build-files/config.json build-files/secrets.json
 ```
 
+Use the google app credentials and copy it to `build-files/secrets.json`.
+
 **local** environment - build
 ```
 docker-compose -f docker-compose.yml build
