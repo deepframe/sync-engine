@@ -19,7 +19,7 @@ docker-compose -f docker-compose.yml build
 docker-compose -f docker-compose.yml up -d
 ```
 
-**local** environment - run migrations
+**local** environment - run initial migrations
 ```
 docker exec -it syncengine_sync-engine-api_1 sh -c 'python ./bin/create-db'
 ```
@@ -27,6 +27,11 @@ docker exec -it syncengine_sync-engine-api_1 sh -c 'python ./bin/create-db'
 Run **production** environment
 ```
 docker-compose -f docker-compose-production.yml up -d
+```
+
+Run migrations
+```
+docker exec -it syncengine_sync-engine-api_1 sh -c 'alembic -x shard_id=0 upgrade +1'
 ```
 
 ## License
