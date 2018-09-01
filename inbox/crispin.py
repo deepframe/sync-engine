@@ -83,10 +83,6 @@ class FolderMissingError(Exception):
     pass
 
 
-class DraftDeletionException(Exception):
-    pass
-
-
 def _get_connection_pool(account_id, pool_size, pool_map, readonly):
     with _lock_map[account_id]:
         if account_id not in pool_map:
@@ -1114,7 +1110,6 @@ class GmailCrispinClient(CrispinClient):
                  message_id_header=message_id_header)
         drafts_folder_name = self.folder_names()['drafts'][0]
         trash_folder_name = self.folder_names()['trash'][0]
-        sent_folder_name = self.folder_names()['sent'][0]
 
         # There's a race condition in how Gmail reconciles sent messages
         # which sometimes causes us to delete both the sent and draft
@@ -1122,19 +1117,6 @@ class GmailCrispinClient(CrispinClient):
         # To work around this, we use x-gm-msgid and check that the
         # sent message and the draft have been reconciled to different
         # values.
-
-        # First find the message in the sent folder
-        self.conn.select_folder(sent_folder_name)
-        matching_uids = self.find_by_header('Message-Id', message_id_header)
-
-        if len(matching_uids) == 0:
-            raise DraftDeletionException(
-                "Couldn't find sent message in sent folder.")
-
-        sent_gm_msgids = self.g_msgids(matching_uids)
-        if len(sent_gm_msgids) != 1:
-            raise DraftDeletionException(
-                "Only one message should have this msgid")
 
         # Then find the draft in the draft folder
         self.conn.select_folder(drafts_folder_name)
@@ -1148,11 +1130,6 @@ class GmailCrispinClient(CrispinClient):
         self.conn.remove_gmail_labels(matching_uids, ['\\Draft'])
 
         gm_msgids = self.g_msgids(matching_uids)
-        for msgid in gm_msgids.values():
-            if msgid == sent_gm_msgids.values()[0]:
-                raise DraftDeletionException(
-                    "Send and draft should have been reconciled as "
-                    "different messages.")
 
         self.conn.copy(matching_uids, trash_folder_name)
         self.conn.select_folder(trash_folder_name)
