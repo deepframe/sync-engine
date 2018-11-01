@@ -216,7 +216,8 @@ class Message(MailSyncBase, HasRevisions, HasPublicID, UpdatedAtMixin,
         """
         self.deleted_at = datetime.datetime.utcnow()
 
-    @validates('subject')
+    # Calling sanitize explicitly on subject parsing
+    # @validates('subject')
     def sanitize_subject(self, key, value):
         # Trim overlong subjects, and remove null bytes. The latter can result
         # when, for example, UTF-8 text decoded from an RFC2047-encoded header
@@ -347,7 +348,7 @@ class Message(MailSyncBase, HasRevisions, HasPublicID, UpdatedAtMixin,
                         account_id=account_id, folder_name=folder_name,
                         mid=mid, mime_version=mime_version)
 
-        self.subject = parsed.subject
+        self.subject = self.sanitize_subject('subject', parsed.subject)
         self.from_addr = parse_mimepart_address_header(parsed, 'From')
         self.sender_addr = parse_mimepart_address_header(parsed, 'Sender')
         self.reply_to = parse_mimepart_address_header(parsed, 'Reply-To')
