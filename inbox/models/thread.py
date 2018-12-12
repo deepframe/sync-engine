@@ -36,13 +36,13 @@ class Thread(MailSyncBase, HasPublicID, HasRevisions, UpdatedAtMixin,
                              backref=backref('threads', passive_deletes=True),
                              load_on_pending=True)
 
-    subject = Column(String(255), nullable=True)
+    subject = Column(String(2047), nullable=True)
     # a column with the cleaned up version of a subject string, to speed up
     # threading queries.
-    _cleaned_subject = Column(String(255), nullable=True)
+    _cleaned_subject = Column(String(2047), nullable=True)
     subjectdate = Column(DateTime, nullable=False, index=True)
     recentdate = Column(DateTime, nullable=False, index=True)
-    snippet = Column(String(191), nullable=True, default='')
+    snippet = Column(String(2047), nullable=True, default='')
     version = Column(Integer, nullable=True, server_default='0')
 
     @validates('subject')

@@ -646,6 +646,8 @@ Index('ix_message_data_sha256', Message.data_sha256, mysql_length=191)
 # For API querying performance.
 Index('ix_message_ns_id_is_draft_received_date', Message.namespace_id,
       Message.is_draft, Message.received_date)
+Index('ix_message_reply_to_message_id', Message.reply_to_message_id)
+Index('ix_message_thread_id', Message.thread_id)
 
 # For async deletion.
 Index('ix_message_namespace_id_deleted_at', Message.namespace_id,
