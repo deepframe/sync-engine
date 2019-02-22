@@ -64,6 +64,9 @@ def decrypt(ciphertext, named_key):
 
 
 def encrypt_batch(batch_input, named_key):
+    """
+    :raise Exception when vault secret_id expired
+    """
     global vault_config
 
     if not vault_config['ENABLED']:
@@ -83,24 +86,20 @@ def encrypt_batch(batch_input, named_key):
         in batch_input
     ]
 
-    try:
-        result = client.write(
-            'transit/encrypt/' + named_key,
-            batch_input=batch_input
-        )
+    result = client.write(
+        'transit/encrypt/' + named_key,
+        batch_input=batch_input
+    )
 
-        # end = time.time()
-        # latency_millis = (end - start) * 1000
-        # print ''.join(['[vault] encryption latency is: ', str(latency_millis), 'ms'])
+    # end = time.time()
+    # latency_millis = (end - start) * 1000
+    # print ''.join(['[vault] encryption latency is: ', str(latency_millis), 'ms'])
 
-        return [
-            element['ciphertext'].encode('utf-8')
-            for element
-            in result['data']['batch_results']
-        ]
-    except Exception as e:
-        print e
-        return [ '' for _ in batch_input ]
+    return [
+        element['ciphertext'].encode('utf-8')
+        for element
+        in result['data']['batch_results']
+    ]
 
 
 def decrypt_batch(batch_input, namespace_public_id):

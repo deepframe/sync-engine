@@ -5,6 +5,7 @@ import itertools
 from hashlib import sha256
 from collections import defaultdict
 
+from inbox.api.err import log_exception
 from inbox.config import config
 vault_config = config.get('VAULT')
 
@@ -327,7 +328,12 @@ class Message(MailSyncBase, HasRevisions, HasPublicID, UpdatedAtMixin,
             ]
 
             named_key = 'account-' + account.namespace.public_id
-            encrypted_data = vault_encrypt_batch(batch_input, named_key)
+            try:
+                encrypted_data = vault_encrypt_batch(batch_input, named_key)
+            except Exception as e:
+                log_exception('Messages encryption failed! with error:\n' + e)
+                # reraise an exception to brake message storing
+                raise e
 
             msg.subject = encrypted_data[0]
             msg.snippet = encrypted_data[1]
