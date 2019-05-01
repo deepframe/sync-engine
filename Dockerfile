@@ -80,9 +80,9 @@ COPY ./requirements.txt /opt/sync-engine/
 RUN pip install 'pyparsing==2.2.0'
 # If python-setuptools is actually the old 'distribute' fork of setuptools,
 # then the first 'pip install setuptools' will be a no-op.
-RUN pip install 'pip==9.0.1' 'setuptools==34.3.1'
+RUN pip install 'pip==19.0.3' 'setuptools==40.8.0'
 RUN hash pip        # /usr/bin/pip might now be /usr/local/bin/pip
-RUN pip install 'pip==9.0.1' 'setuptools==34.3.1'
+RUN pip install 'pip==19.0.3' 'setuptools==40.8.0'
 
 # Doing pip upgrade setuptools leaves behind this problematic symlink
 RUN rm -rf /usr/lib/python2.7/dist-packages/setuptools.egg-info

@@ -1,7 +1,6 @@
 .git*
 debian
-docker-compose.dev.yml
-docker-compose.yml
+docker-compose*
 inbox_sync.egg-info/
 inbox/test
 README*

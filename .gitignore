@@ -87,6 +87,3 @@ setup/
 
 # Pycharm
 .idea/
-
-# application specific
-build-files/secrets.json
