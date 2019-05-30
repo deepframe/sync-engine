@@ -30,13 +30,12 @@ OAUTH_ACCESS_TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
 OAUTH_TOKEN_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v2/tokeninfo'
 OAUTH_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v1/userinfo'
 
-# NOTE: urls for email address and G+ profile are deprecated
 OAUTH_SCOPE = ' '.join([
-    'https://www.googleapis.com/auth/userinfo.email',  # email address
-    'https://www.googleapis.com/auth/userinfo.profile',  # G+ profile
-    'https://mail.google.com/',  # email
-    'https://www.google.com/m8/feeds',  # contacts
-    'https://www.googleapis.com/auth/calendar'  # calendar
+    'email',
+    'profile',
+    'https://mail.google.com/',
+    'https://www.googleapis.com/auth/contacts',
+    'https://www.googleapis.com/auth/calendar'
 ])
 
 

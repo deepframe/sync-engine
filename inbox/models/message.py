@@ -28,6 +28,7 @@ from inbox.util.addr import parse_mimepart_address_header
 from inbox.util.misc import parse_references, get_internaldate
 from inbox.util.blockstore import save_to_blockstore
 from inbox.security.blobstorage import encode_blob, decode_blob
+from inbox.security.crypto import CryptoCipher
 from inbox.models.mixins import (HasPublicID, HasRevisions, UpdatedAtMixin,
                                  DeletedAtMixin)
 from inbox.models.base import MailSyncBase
@@ -316,8 +317,13 @@ class Message(MailSyncBase, HasRevisions, HasPublicID, UpdatedAtMixin,
 
         content_data = msg._get_content()
 
-        # if not isinstance(body_string, unicode):
-        #     body_string = body_string.decode('utf-8')
+        if config.get('CRYPTO_ENCRYPTION_KEY'):
+            crypto = CryptoCipher()
+            msg.subject = crypto.encrypt(content_data['subject'])
+            msg.snippet = crypto.encrypt(content_data['snippet'])
+            msg.body = crypto.encrypt(content_data['body'])
+            msg.encrypted = 1
+
 
         if vault_config['ENABLED']:
             batch_input = [
